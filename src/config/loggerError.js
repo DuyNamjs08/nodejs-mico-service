@@ -1,3 +1,5 @@
+const logger = require('./logger');
+
 const logError = (err, req, res, next) => {
   if (err) {
     logger.error(`Error occurred in ${req.method} ${req.url}: ${err.message}`);
@@ -5,5 +7,5 @@ const logError = (err, req, res, next) => {
   }
 
   // Tiếp tục xử lý lỗi và phản hồi
-  res.status(500).json({ message: "Internal Server Error" });
+  res.status(500).json({ message: 'Internal Server Error' });
 };

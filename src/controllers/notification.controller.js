@@ -1,5 +1,5 @@
-const { successResponse, errorResponse } = require("../helpers/response");
-const { getAllNotifications } = require("../services/Notification.service");
+const { successResponse, errorResponse } = require('../helpers/response');
+const { getAllNotifications } = require('../services/Notification.service');
 class NotificationController {
   getAllNotifications = async (req, res) => {
     try {
@@ -7,11 +7,11 @@ class NotificationController {
       const notifications = await getAllNotifications({ shopId });
       return successResponse(
         res,
-        "getAllNotifications  successfully",
+        'getAllNotifications  successfully',
         notifications
       );
     } catch (error) {
-      return errorResponse(res, "Failed to getAllNotifications", error);
+      return errorResponse(res, 'Failed to getAllNotifications', error);
     }
   };
 }

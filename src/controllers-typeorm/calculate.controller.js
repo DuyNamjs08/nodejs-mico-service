@@ -1,5 +1,5 @@
-const Calculation = require("../entity/Calculation");
-const { getRepository } = require("typeorm");
+const Calculation = require('../entity/Calculation');
+const { getRepository } = require('typeorm');
 
 const calController = async (req, res) => {
   try {
@@ -8,9 +8,9 @@ const calController = async (req, res) => {
     if (number === undefined || result === undefined) {
       return res
         .status(400)
-        .json({ message: "number and result are required" });
+        .json({ message: 'number and result are required' });
     }
-    const calculationRepo = getRepository("Calculation");
+    const calculationRepo = getRepository('Calculation');
 
     const newCalculation = calculationRepo.create({
       number,
@@ -21,8 +21,8 @@ const calController = async (req, res) => {
 
     res.status(201).json(savedCalculation);
   } catch (err) {
-    console.error("Error creating calculation:", err);
-    res.status(500).json({ message: "Internal server error" });
+    console.error('Error creating calculation:', err);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 

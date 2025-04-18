@@ -1,4 +1,4 @@
-const { prisma } = require("../config/prisma");
+const { prisma } = require('../config/prisma');
 
 async function uploadData4g(data) {
   console.log(data);
@@ -9,7 +9,7 @@ async function uploadData4g(data) {
     });
     return 1;
   } catch (error) {
-    console.error("❌ Lỗi khi lưu vào DB:", error);
+    console.error('❌ Lỗi khi lưu vào DB:', error);
   }
 }
 

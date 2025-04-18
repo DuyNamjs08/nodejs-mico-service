@@ -1,4 +1,4 @@
-const NotiModel = require("../models/Notification.model");
+const NotiModel = require('../models/Notification.model');
 
 const createNotification = async (data) => {
   const {
@@ -7,17 +7,17 @@ const createNotification = async (data) => {
     noti_receivedId = 1,
     noti_options = {},
   } = data;
-  let noti_content = "";
-  if (noti_type === "ORDER−001") {
-    noti_content = "Order successfully";
-  } else if (noti_type === "ORDER−002") {
-    noti_content = "Order failed";
-  } else if (noti_type === "PROMOTION−001") {
-    noti_content = "@@@ vừa thêm 1 voucher: @@@@@";
-  } else if (noti_type === "SHOP−001") {
-    noti_content = "@@@ vừa thêm 1 sản phẩm: @@@@";
+  let noti_content = '';
+  if (noti_type === 'ORDER−001') {
+    noti_content = 'Order successfully';
+  } else if (noti_type === 'ORDER−002') {
+    noti_content = 'Order failed';
+  } else if (noti_type === 'PROMOTION−001') {
+    noti_content = '@@@ vừa thêm 1 voucher: @@@@@';
+  } else if (noti_type === 'SHOP−001') {
+    noti_content = '@@@ vừa thêm 1 sản phẩm: @@@@';
   } else {
-    noti_content = "Notification";
+    noti_content = 'Notification';
   }
   const notification = await NotiModel.create({
     noti_type,
@@ -30,14 +30,14 @@ const createNotification = async (data) => {
 };
 const getAllNotifications = async ({
   userId = 1,
-  type = "ALL",
+  type = 'ALL',
   isRead = 0,
 }) => {
   const match = {
     noti_receivedId: userId,
   };
   console.log(match);
-  if (type !== "ALL") {
+  if (type !== 'ALL') {
     match.noti_type = type;
   }
 
@@ -47,15 +47,15 @@ const getAllNotifications = async ({
     },
     {
       $lookup: {
-        from: "Product",
-        localField: "noti_options.productId",
-        foreignField: "_id",
-        as: "product",
+        from: 'Product',
+        localField: 'noti_options.productId',
+        foreignField: '_id',
+        as: 'product',
       },
     },
     {
       $unwind: {
-        path: "$product",
+        path: '$product',
         preserveNullAndEmptyArrays: true,
       },
     },
@@ -65,13 +65,13 @@ const getAllNotifications = async ({
           $replaceOne: {
             input: {
               $replaceOne: {
-                input: "$noti_content",
-                find: "@@@@",
-                replacement: "$product.name",
+                input: '$noti_content',
+                find: '@@@@',
+                replacement: '$product.name',
               },
             },
-            find: "@@@",
-            replacement: "Shop babe",
+            find: '@@@',
+            replacement: 'Shop babe',
           },
         },
       },
@@ -81,7 +81,7 @@ const getAllNotifications = async ({
         noti_type: 1,
         noti_senderId: 1,
         noti_receivedId: 1,
-        noti_content: "$finalContent",
+        noti_content: '$finalContent',
         noti_options: 1,
         createdAt: 1,
       },

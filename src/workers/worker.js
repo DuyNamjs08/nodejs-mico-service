@@ -1,4 +1,4 @@
-const workerpool = require("workerpool");
+const workerpool = require('workerpool');
 
 function heavyComputation(n) {
   let sum = 0;

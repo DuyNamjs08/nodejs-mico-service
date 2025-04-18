@@ -1,14 +1,14 @@
-const express = require("express");
-const cluster = require("cluster");
-const os = require("os");
-const Redis = require("ioredis");
-const { RateLimiterRedis } = require("rate-limiter-flexible");
-const pino = require("pino");
-const prometheus = require("prom-client");
+const express = require('express');
+const cluster = require('cluster');
+const os = require('os');
+const Redis = require('ioredis');
+const { RateLimiterRedis } = require('rate-limiter-flexible');
+const pino = require('pino');
+const prometheus = require('prom-client');
 
 // Logging setup
 const logger = pino({
-  level: "info",
+  level: 'info',
   formatters: {
     level: (label) => {
       return { level: label.toUpperCase() };
@@ -19,22 +19,22 @@ const logger = pino({
 // Prometheus metrics
 prometheus.collectDefaultMetrics();
 const httpRequestDurationMicroseconds = new prometheus.Histogram({
-  name: "http_request_duration_ms",
-  help: "Duration of HTTP requests in ms",
-  labelNames: ["method", "route", "code"],
+  name: 'http_request_duration_ms',
+  help: 'Duration of HTTP requests in ms',
+  labelNames: ['method', 'route', 'code'],
   buckets: [0.1, 5, 15, 50, 100, 200, 300, 400, 500],
 });
 
 // Redis connection for rate limiting and caching
 const redisClient = new Redis({
-  host: process.env.REDIS_HOST || "localhost",
+  host: process.env.REDIS_HOST || 'localhost',
   port: process.env.REDIS_PORT || 6379,
 });
 
 // Rate limiter configuration
 const rateLimiter = new RateLimiterRedis({
   storeClient: redisClient,
-  keyPrefix: "middleware",
+  keyPrefix: 'middleware',
   points: 100, // 100 requests
   duration: 1, // per 1 second
 });
@@ -47,7 +47,7 @@ const rateLimiterMiddleware = (req, res, next) => {
       next();
     })
     .catch(() => {
-      res.status(429).send("Too Many Requests");
+      res.status(429).send('Too Many Requests');
     });
 };
 
@@ -63,7 +63,7 @@ const createServer = () => {
   app.use((req, res, next) => {
     const start = Date.now();
 
-    res.on("finish", () => {
+    res.on('finish', () => {
       const duration = Date.now() - start;
 
       httpRequestDurationMicroseconds
@@ -82,7 +82,7 @@ const createServer = () => {
   });
 
   // Example endpoint with caching
-  app.get("/users/:id", async (req, res) => {
+  app.get('/users/:id', async (req, res) => {
     const userId = req.params.id;
 
     try {
@@ -100,27 +100,27 @@ const createServer = () => {
       await redisClient.set(
         `user:${userId}`,
         JSON.stringify(user),
-        "EX",
+        'EX',
         3600 // 1 hour expiration
       );
 
       res.json(user);
     } catch (error) {
       logger.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   });
 
   // Metrics endpoint for Prometheus
-  app.get("/metrics", async (req, res) => {
-    res.set("Content-Type", prometheus.register.contentType);
+  app.get('/metrics', async (req, res) => {
+    res.set('Content-Type', prometheus.register.contentType);
     res.end(await prometheus.register.metrics());
   });
 
   // Health check
-  app.get("/health", (req, res) => {
+  app.get('/health', (req, res) => {
     res.status(200).json({
-      status: "healthy",
+      status: 'healthy',
       uptime: process.uptime(),
     });
   });
@@ -148,7 +148,7 @@ if (cluster.isPrimary) {
     cluster.fork();
   }
 
-  cluster.on("exit", (worker, code, signal) => {
+  cluster.on('exit', (worker, code, signal) => {
     logger.warn(`Worker ${worker.process.pid} died`);
     cluster.fork(); // Replace the dead worker
   });
@@ -162,8 +162,8 @@ if (cluster.isPrimary) {
 }
 
 // Graceful shutdown
-process.on("SIGTERM", () => {
-  logger.info("SIGTERM signal received: closing HTTP server");
+process.on('SIGTERM', () => {
+  logger.info('SIGTERM signal received: closing HTTP server');
   process.exit(0);
 });
 

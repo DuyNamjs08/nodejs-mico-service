@@ -1,10 +1,10 @@
-const amqplib = require("amqplib");
+const amqplib = require('amqplib');
 
 const runConsumer = async () => {
   try {
-    const connection = await amqplib.connect("amqp://admin:admin123@localhost");
+    const connection = await amqplib.connect('amqp://admin:admin123@localhost');
     const channel = await connection.createChannel();
-    const queueName = "test_topic";
+    const queueName = 'test_topic';
     await channel.assertQueue(queueName, {
       durable: true,
     });
@@ -21,9 +21,9 @@ const runConsumer = async () => {
       }
     );
   } catch (error) {
-    console.error("Error in producer:", error);
+    console.error('Error in producer:', error);
   }
 };
 runConsumer().catch((error) => {
-  console.error("Error in producer:", error);
+  console.error('Error in producer:', error);
 });

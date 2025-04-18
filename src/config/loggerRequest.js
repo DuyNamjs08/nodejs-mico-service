@@ -1,4 +1,4 @@
-const logger = require("./logger");
+const logger = require('./logger');
 
 // Middleware để log yêu cầu API
 const logRequest = (req, res, next) => {

@@ -1,3 +1,5 @@
+const logger = require('./logger');
+
 const logResponse = (req, res, next) => {
   const originalSend = res.send;
 

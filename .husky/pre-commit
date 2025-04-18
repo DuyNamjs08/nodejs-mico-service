@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npm test && npm run lint  # Chạy lần lượt, nếu test pass mới chạy lint

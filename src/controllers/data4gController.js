@@ -1,12 +1,12 @@
-const { uploadData4g } = require("../models/data4g");
-const xlsx = require("xlsx");
-const fs = require("fs");
+const { uploadData4g } = require('../models/data4g');
+const xlsx = require('xlsx');
+const fs = require('fs');
 
 async function processUpload(req, res) {
   try {
     if (!req.file) {
       return res.status(400).json({
-        message: "Không tìm thấy file",
+        message: 'Không tìm thấy file',
         error: true,
       });
     }
@@ -18,24 +18,24 @@ async function processUpload(req, res) {
     const excelData = xlsx.utils.sheet_to_json(sheet); // đổi tên biến 'data' để tránh trùng
     console.log(excelData);
 
-    // const result = await uploadData4g(excelData);
+    const result = await uploadData4g(excelData);
     if (!result) {
       return res.status(500).json({
-        message: "Lỗi khi lưu vào DB",
+        message: 'Lỗi khi lưu vào DB',
         error: true,
       });
     }
 
     fs.unlinkSync(filePath); // Xóa file tạm
     return res.status(200).json({
-      message: "Đã xử lý và lưu vào DB thành công!",
+      message: 'Đã xử lý và lưu vào DB thành công!',
       error: false,
       result,
     });
   } catch (error) {
-    console.error("❌ Lỗi xử lý:", error);
+    console.error('❌ Lỗi xử lý:', error);
     return res.status(500).json({
-      message: "Đã xảy ra lỗi trong quá trình xử lý",
+      message: 'Đã xảy ra lỗi trong quá trình xử lý',
       error: true,
       details: error.message,
     });

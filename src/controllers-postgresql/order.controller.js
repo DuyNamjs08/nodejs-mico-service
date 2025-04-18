@@ -1,7 +1,7 @@
-const { prisma } = require("../config/prisma");
-const { getRandomElement, paginate } = require("../helpers");
-const { successResponse, errorResponse } = require("../helpers/response");
-const { faker } = require("@faker-js/faker");
+const { prisma } = require('../config/prisma');
+const { getRandomElement, paginate } = require('../helpers');
+const { successResponse, errorResponse } = require('../helpers/response');
+const { faker } = require('@faker-js/faker');
 const createOrderController = async (req, res) => {
   const { quantity, status } = req.body;
   try {
@@ -30,12 +30,12 @@ const createOrderController = async (req, res) => {
       },
     });
     if (!response) {
-      return errorResponse(res, "Tạo order không thành công", {}, 400);
+      return errorResponse(res, 'Tạo order không thành công', {}, 400);
     }
-    return successResponse(res, "Tạo order thành công", response);
+    return successResponse(res, 'Tạo order thành công', response);
   } catch (error) {
-    console.error("error", error);
-    return errorResponse(res, "Tạo order không thành công", error, 500);
+    console.error('error', error);
+    return errorResponse(res, 'Tạo order không thành công', error, 500);
   }
 };
 const getOrderController = async (req, res) => {
@@ -51,12 +51,12 @@ const getOrderController = async (req, res) => {
         product: true,
       },
     });
-    return successResponse(res, "get danh sách order thành công", response);
+    return successResponse(res, 'get danh sách order thành công', response);
   } catch (error) {
-    console.error("error", error);
+    console.error('error', error);
     return errorResponse(
       res,
-      "get danh sách order không thành công",
+      'get danh sách order không thành công',
       error,
       500
     );
@@ -84,11 +84,11 @@ const fakerDataorderInsert = async (req, res) => {
     for (let i = 0; i < TOTAL; i += BATCH_SIZE) {
       const orders = Array.from({ length: BATCH_SIZE }).map(() => ({
         status: faker.helpers.arrayElement([
-          "pending",
-          "completed",
-          "cancelled",
-          "shipped",
-          "refunded",
+          'pending',
+          'completed',
+          'cancelled',
+          'shipped',
+          'refunded',
         ]),
         quantity: faker.number.int({ min: 1000, max: 10000000 }),
         userId: getRandomElement(userIds),
@@ -103,10 +103,10 @@ const fakerDataorderInsert = async (req, res) => {
 
       console.log(`Inserted batch ${i + BATCH_SIZE}/${TOTAL}`);
     }
-    return successResponse(res, "Tạo nhiều order thành công", {});
+    return successResponse(res, 'Tạo nhiều order thành công', {});
   } catch (error) {
-    console.error("error", error);
-    return errorResponse(res, "Tạo nhiều order không thành công", error, 500);
+    console.error('error', error);
+    return errorResponse(res, 'Tạo nhiều order không thành công', error, 500);
   }
 };
 

@@ -1,7 +1,7 @@
-const RedisPubSub = require("../services/RedisPubSub.service");
+const RedisPubSub = require('../services/RedisPubSub.service');
 class InventoryServiceTest {
   constructor() {
-    RedisPubSub.subscribe("purchase-event", (message) => {
+    RedisPubSub.subscribe('purchase-event', (message) => {
       try {
         const messages = JSON.parse(message);
         InventoryServiceTest.updateInventory(
@@ -9,7 +9,7 @@ class InventoryServiceTest {
           messages.quantity
         );
       } catch (error) {
-        console.error("Invalid message format:", message, error);
+        console.error('Invalid message format:', message, error);
       }
     });
   }
@@ -19,7 +19,7 @@ class InventoryServiceTest {
         `Updating inventory for product ${productId} with quantity ${quantity}`
       );
     } catch (error) {
-      console.error("Error publishing inventory update message:", error);
+      console.error('Error publishing inventory update message:', error);
       throw error;
     }
   };

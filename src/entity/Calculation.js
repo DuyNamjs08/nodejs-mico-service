@@ -1,23 +1,23 @@
-const { EntitySchema } = require("typeorm");
+const { EntitySchema } = require('typeorm');
 
 module.exports = new EntitySchema({
-  name: "Calculation",
-  tableName: "Calculation",
+  name: 'Calculation',
+  tableName: 'Calculation',
   columns: {
     id: {
       primary: true,
-      type: "int",
+      type: 'int',
       generated: true,
     },
     number: {
-      type: "bigint",
+      type: 'bigint',
     },
     result: {
-      type: "bigint",
+      type: 'bigint',
     },
     createdAt: {
-      type: "timestamp",
-      default: () => "CURRENT_TIMESTAMP",
+      type: 'timestamp',
+      default: () => 'CURRENT_TIMESTAMP',
     },
   },
 });

@@ -1,11 +1,11 @@
-const express = require("express");
+const express = require('express');
 const {
   calController,
-} = require("../../controllers-typeorm/calculate.controller");
+} = require('../../controllers-typeorm/calculate.controller');
 
 const router = express.Router();
 //calculation
-router.post("/calculation", calController);
+router.post('/calculation', calController);
 // // user
 // router.post("/user", createUserController);
 // router.post("/user-faker", fakerDataInsert);

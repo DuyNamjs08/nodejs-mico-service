@@ -76,7 +76,19 @@ services:
       # KAFKAJS_NO_PARTITIONER_WARNING: "1"
     volumes:
       - kafka_data:/bitnami/kafka
-
+  jenkins:
+    image: jenkins/jenkins:jdk17
+    container_name: my-jenkins
+    user: root
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock # Cho phép Jenkins dùng Docker host
+      - ./jenkins:/app # Mount thư mục chứa Jenkinsfile nếu cần
+    depends_on:
+      - app # Tuỳ chọn, nếu Jenkins cần chờ app service lên
   app:
     build: .
     container_name: my-app
@@ -106,3 +118,4 @@ volumes:
   postgres_data:
   kafka_data:
   rabbitmq_data:
+  jenkins_home:

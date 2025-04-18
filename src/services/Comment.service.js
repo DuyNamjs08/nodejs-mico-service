@@ -1,5 +1,5 @@
-"use strict";
-const Comment = require("../models/Comment.model");
+'use strict';
+const Comment = require('../models/Comment.model');
 class CommentService {
   static async createComment({
     productId,
@@ -18,7 +18,7 @@ class CommentService {
       if (parentCommentId) {
         const parentComment = await Comment.findById(parentCommentId);
         if (!parentComment) {
-          throw new Error("Parent comment not found");
+          throw new Error('Parent comment not found');
         }
         // update many comments
         rightValue = parentComment.comment_right;
@@ -45,7 +45,7 @@ class CommentService {
             comment_productId: productId,
             isDeleted: false,
           },
-          "comment_right",
+          'comment_right',
           {
             sort: { comment_right: -1 },
           }
@@ -73,7 +73,7 @@ class CommentService {
     if (parentCommentId) {
       const parents = await Comment.findById(parentCommentId);
       if (!parents) {
-        throw new Error("Parent comment not found");
+        throw new Error('Parent comment not found');
       }
       const comments = await Comment.find({
         comment_productId: productId,
@@ -114,7 +114,7 @@ class CommentService {
   static async deleteComment({ commentId, productId }) {
     const comment = await Comment.findById(commentId);
     if (!comment) {
-      throw new Error("Comment not found");
+      throw new Error('Comment not found');
     }
     //1. xac dinh left va right
     const leftValue = comment.comment_left;

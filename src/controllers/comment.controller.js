@@ -1,6 +1,6 @@
-"use strict";
-const CommentService = require("../services/Comment.service");
-const { successResponse, errorResponse } = require("../helpers/response");
+'use strict';
+const CommentService = require('../services/Comment.service');
+const { successResponse, errorResponse } = require('../helpers/response');
 class CommentController {
   createComment = async (req, res) => {
     try {
@@ -11,9 +11,9 @@ class CommentController {
         content,
         parentCommentId,
       });
-      return successResponse(res, "Comment created successfully", comment);
+      return successResponse(res, 'Comment created successfully', comment);
     } catch (error) {
-      return errorResponse(res, "Failed to create comment", error);
+      return errorResponse(res, 'Failed to create comment', error);
     }
   };
   getComments = async (req, res) => {
@@ -23,9 +23,9 @@ class CommentController {
         productId,
         parentCommentId,
       });
-      return successResponse(res, "Comment gets successfully", comment);
+      return successResponse(res, 'Comment gets successfully', comment);
     } catch (error) {
-      return errorResponse(res, "Failed to gets comment", error);
+      return errorResponse(res, 'Failed to gets comment', error);
     }
   };
   deleteComments = async (req, res) => {
@@ -35,9 +35,9 @@ class CommentController {
         commentId,
         productId,
       });
-      return successResponse(res, "Delete comment successfully", comment);
+      return successResponse(res, 'Delete comment successfully', comment);
     } catch (error) {
-      return errorResponse(res, "Failed to delete comments", error);
+      return errorResponse(res, 'Failed to delete comments', error);
     }
   };
 }

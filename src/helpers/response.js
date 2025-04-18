@@ -2,7 +2,7 @@
 
 const successResponse = (
   res,
-  message = "Success",
+  message = 'Success',
   data = {},
   statusCode = 200
 ) => {
@@ -15,7 +15,7 @@ const successResponse = (
 
 const errorResponse = (
   res,
-  message = "Error",
+  message = 'Error',
   error = {},
   statusCode = 500
 ) => {

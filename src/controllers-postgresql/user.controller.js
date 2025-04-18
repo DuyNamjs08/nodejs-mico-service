@@ -1,6 +1,6 @@
-const { prisma } = require("../config/prisma");
-const { successResponse, errorResponse } = require("../helpers/response");
-const { faker } = require("@faker-js/faker");
+const { prisma } = require('../config/prisma');
+const { successResponse, errorResponse } = require('../helpers/response');
+const { faker } = require('@faker-js/faker');
 
 const createUserController = async (req, res) => {
   const { email, name } = req.body;
@@ -9,12 +9,12 @@ const createUserController = async (req, res) => {
       data: { email, name },
     });
     if (!response) {
-      return errorResponse(res, "Tạo user không thành công", {}, 400);
+      return errorResponse(res, 'Tạo user không thành công', {}, 400);
     }
-    return successResponse(res, "Tạo user thành công", response);
+    return successResponse(res, 'Tạo user thành công', response);
   } catch (error) {
-    console.error("error", error);
-    return errorResponse(res, "Tạo user không thành công", error, 500);
+    console.error('error', error);
+    return errorResponse(res, 'Tạo user không thành công', error, 500);
   }
 };
 const fakerDataInsert = async (req, res) => {
@@ -36,10 +36,10 @@ const fakerDataInsert = async (req, res) => {
 
       console.log(`Inserted batch ${i + BATCH_SIZE}/${TOTAL}`);
     }
-    return successResponse(res, "Tạo nhiều user thành công", {});
+    return successResponse(res, 'Tạo nhiều user thành công', {});
   } catch (error) {
-    console.error("error", error);
-    return errorResponse(res, "Tạo nhiều user không thành công", error, 500);
+    console.error('error', error);
+    return errorResponse(res, 'Tạo nhiều user không thành công', error, 500);
   }
 };
 

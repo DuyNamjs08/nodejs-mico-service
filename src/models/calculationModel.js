@@ -1,4 +1,4 @@
-const { prisma } = require("../config/prisma");
+const { prisma } = require('../config/prisma');
 
 async function saveResult(number, result) {
   try {
@@ -7,7 +7,7 @@ async function saveResult(number, result) {
     });
     console.log(`✅ Lưu vào DB thành công: ${result}`);
   } catch (error) {
-    console.error("❌ Lỗi khi lưu vào DB:", error);
+    console.error('❌ Lỗi khi lưu vào DB:', error);
   }
 }
 

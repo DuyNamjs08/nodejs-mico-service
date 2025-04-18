@@ -1,7 +1,7 @@
-const { prisma } = require("../config/prisma");
-const { getRandomElement } = require("../helpers");
-const { successResponse, errorResponse } = require("../helpers/response");
-const { faker } = require("@faker-js/faker");
+const { prisma } = require('../config/prisma');
+const { getRandomElement } = require('../helpers');
+const { successResponse, errorResponse } = require('../helpers/response');
+const { faker } = require('@faker-js/faker');
 const createProductController = async (req, res) => {
   const { name, price, description } = req.body;
   try {
@@ -19,12 +19,12 @@ const createProductController = async (req, res) => {
       },
     });
     if (!response) {
-      return errorResponse(res, "Tạo product không thành công", {}, 400);
+      return errorResponse(res, 'Tạo product không thành công', {}, 400);
     }
-    return successResponse(res, "Tạo product thành công", response);
+    return successResponse(res, 'Tạo product thành công', response);
   } catch (error) {
-    console.error("error", error);
-    return errorResponse(res, "Tạo product không thành công", error, 500);
+    console.error('error', error);
+    return errorResponse(res, 'Tạo product không thành công', error, 500);
   }
 };
 const fakerDataproductInsert = async (req, res) => {
@@ -51,10 +51,10 @@ const fakerDataproductInsert = async (req, res) => {
 
       console.log(`Inserted batch ${i + BATCH_SIZE}/${TOTAL}`);
     }
-    return successResponse(res, "Tạo nhiều product thành công", {});
+    return successResponse(res, 'Tạo nhiều product thành công', {});
   } catch (error) {
-    console.error("error", error);
-    return errorResponse(res, "Tạo nhiều product không thành công", error, 500);
+    console.error('error', error);
+    return errorResponse(res, 'Tạo nhiều product không thành công', error, 500);
   }
 };
 

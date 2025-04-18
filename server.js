@@ -1,23 +1,23 @@
-const cluster = require("cluster");
-const os = require("os");
+const cluster = require('cluster');
+const os = require('os');
 const numCPUs = os.cpus().length;
 const numsWorker = Math.min(4, numCPUs);
-const compression = require("compression");
-const calculationRoutes = require("./src/routes/calculationRoutes");
-const { prisma } = require("./src/models/calculationModel");
-const redisClient = require("./src/config/redis-config");
-const logger = require("./src/config/logger");
-const { processUpload } = require("./src/controllers/data4gController");
-const multer = require("multer");
-const ProductServiceTest = require("./src/test/product.test");
-const connectDB = require("./src/config/mongoDb.config");
-const connectToTypeOrm = require("./src/config/typeorm");
-const commentRoutes = require("./src/routes/comments/index");
-const productRoutes = require("./src/routes/products/index");
-const notiRoutes = require("./src/routes/notifications/index");
-const postgresqlRoutes = require("./src/routes/postgresql/index");
-const typeormRoutes = require("./src/routes/typeorm/index");
-const redisRoutes = require("./src/routes/redis/index");
+const compression = require('compression');
+const calculationRoutes = require('./src/routes/calculationRoutes');
+const { prisma } = require('./src/models/calculationModel');
+const redisClient = require('./src/config/redis-config');
+const logger = require('./src/config/logger');
+const { processUpload } = require('./src/controllers/data4gController');
+const multer = require('multer');
+const ProductServiceTest = require('./src/test/product.test');
+const connectDB = require('./src/config/mongoDb.config');
+const connectToTypeOrm = require('./src/config/typeorm');
+const commentRoutes = require('./src/routes/comments/index');
+const productRoutes = require('./src/routes/products/index');
+const notiRoutes = require('./src/routes/notifications/index');
+const postgresqlRoutes = require('./src/routes/postgresql/index');
+const typeormRoutes = require('./src/routes/typeorm/index');
+const redisRoutes = require('./src/routes/redis/index');
 
 // if (cluster.isMaster) {
 //   console.log(`Master ${process.pid} is running`);
@@ -61,18 +61,18 @@ const redisRoutes = require("./src/routes/redis/index");
 //     }, 3000); // Delay 3s trước khi restart
 //   });
 // } else {
-const express = require("express");
+const express = require('express');
 const app = express();
 connectDB();
 connectToTypeOrm();
 app.use(express.json());
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: 'uploads/' });
 
 app.use(
   compression({
     threshold: 1024,
     filter: (req, res) => {
-      console.log("Compression check for:", req.url);
+      console.log('Compression check for:', req.url);
       return compression.filter(req, res);
     },
   })
@@ -109,7 +109,7 @@ async function checkConnections() {
 
 // checkConnections().finally(() => prisma.$disconnect());
 // logger.error("An error occurred");
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   console.log(`Worker ${process.pid} is processing request`);
   // const bigData = "a".repeat(5000);
   // return res.json({
@@ -118,14 +118,14 @@ app.get("/", (req, res) => {
   // });
   return res.send(`Worker ${process.pid} is handling this request`);
 });
-app.use("/api/redis/", redisRoutes);
-app.use("/api/typeorm/", typeormRoutes);
-app.use("/api/postgresql/", postgresqlRoutes);
-app.use("/api", notiRoutes);
-app.use("/api", productRoutes);
-app.use("/api", commentRoutes);
-app.use("/api", calculationRoutes);
-app.use("/data4g", upload.single("file"), processUpload);
+app.use('/api/redis/', redisRoutes);
+app.use('/api/typeorm/', typeormRoutes);
+app.use('/api/postgresql/', postgresqlRoutes);
+app.use('/api', notiRoutes);
+app.use('/api', productRoutes);
+app.use('/api', commentRoutes);
+app.use('/api', calculationRoutes);
+app.use('/data4g', upload.single('file'), processUpload);
 
 app.listen(4000, () => console.log(`Worker ${process.pid} started`));
 

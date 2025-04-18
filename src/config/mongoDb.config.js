@@ -19,15 +19,15 @@
 // module.exports = connectDB;
 
 // =======================================================
-const mongoose = require("mongoose");
-require("dotenv").config();
-const { Client } = require("@elastic/elasticsearch");
-const { prepareForEs } = require("../helpers");
+const mongoose = require('mongoose');
+require('dotenv').config();
+const { Client } = require('@elastic/elasticsearch');
+const { prepareForEs } = require('../helpers');
 const esClient = new Client({
   node: process.env.ELASTICSEARCH_URL,
   headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
   },
 });
 
@@ -35,47 +35,47 @@ const connectDB = async () => {
   try {
     const uri = process.env.MONGODB_URL;
     if (!uri) {
-      throw new Error("❌ MONGODB_URL is not defined in environment variables");
+      throw new Error('❌ MONGODB_URL is not defined in environment variables');
     }
     await mongoose.connect(uri);
-    console.log("✅ MongoDB connected!");
+    console.log('✅ MongoDB connected!');
     initialSync();
     const db = mongoose.connection.db;
-    const changeStream = db.watch([], { fullDocument: "updateLookup" });
-    changeStream.on("change", async (change) => {
+    const changeStream = db.watch([], { fullDocument: 'updateLookup' });
+    changeStream.on('change', async (change) => {
       const ns = change.ns; // namespace: { db: 'yourDB', coll: 'users' }
       const indexName = ns.coll.toLowerCase(); // dùng tên collection làm index
       const docId = change.documentKey._id.toString();
 
       switch (change.operationType) {
-        case "insert":
-        case "update":
-        case "replace":
-          const doc = change.fullDocument;
-          if (!doc) {
-            console.warn(`⚠️ No fullDocument in change event for ${indexName}`);
-            return;
-          }
-          const docForEs = prepareForEs(change.fullDocument);
-          await esClient.index({
-            index: indexName,
-            id: docId,
-            body: docForEs,
-          });
-          console.log(`📤 Synced ${indexName}: ${docId}`);
-          break;
+      case 'insert':
+      case 'update':
+      case 'replace':
+        const doc = change.fullDocument;
+        if (!doc) {
+          console.warn(`⚠️ No fullDocument in change event for ${indexName}`);
+          return;
+        }
+        const docForEs = prepareForEs(change.fullDocument);
+        await esClient.index({
+          index: indexName,
+          id: docId,
+          body: docForEs,
+        });
+        console.log(`📤 Synced ${indexName}: ${docId}`);
+        break;
 
-        case "delete":
-          await esClient.delete({
-            index: indexName,
-            id: docId,
-          });
-          console.log(`❌ Deleted from ${indexName}: ${docId}`);
-          break;
+      case 'delete':
+        await esClient.delete({
+          index: indexName,
+          id: docId,
+        });
+        console.log(`❌ Deleted from ${indexName}: ${docId}`);
+        break;
       }
     });
   } catch (error) {
-    console.error("❌ MongoDB connection error:", err);
+    console.error('❌ MongoDB connection error:', error);
     process.exit(1);
   }
 };
@@ -111,7 +111,7 @@ async function initialSync() {
       console.log(`🔄 Initial sync completed for ${indexName}`);
     }
   } catch (error) {
-    console.error("❌ Initial sync error:", error);
+    console.error('❌ Initial sync error:', error);
   }
 }
 

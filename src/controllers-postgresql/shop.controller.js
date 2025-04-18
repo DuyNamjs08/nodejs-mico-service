@@ -1,7 +1,7 @@
-const { prisma } = require("../config/prisma");
-const { getRandomElement, paginate } = require("../helpers");
-const { successResponse, errorResponse } = require("../helpers/response");
-const { faker } = require("@faker-js/faker");
+const { prisma } = require('../config/prisma');
+const { getRandomElement, paginate } = require('../helpers');
+const { successResponse, errorResponse } = require('../helpers/response');
+const { faker } = require('@faker-js/faker');
 const createShopController = async (req, res) => {
   const { name, address } = req.body;
   try {
@@ -18,12 +18,12 @@ const createShopController = async (req, res) => {
       },
     });
     if (!response) {
-      return errorResponse(res, "Tạo shop không thành công", {}, 400);
+      return errorResponse(res, 'Tạo shop không thành công', {}, 400);
     }
-    return successResponse(res, "Tạo shop thành công", response);
+    return successResponse(res, 'Tạo shop thành công', response);
   } catch (error) {
-    console.error("error", error);
-    return errorResponse(res, "Tạo shop không thành công", error, 500);
+    console.error('error', error);
+    return errorResponse(res, 'Tạo shop không thành công', error, 500);
   }
 };
 const getShopController = async (req, res) => {
@@ -37,12 +37,12 @@ const getShopController = async (req, res) => {
         user: true,
       },
     });
-    return successResponse(res, "get danh sách shop thành công", response);
+    return successResponse(res, 'get danh sách shop thành công', response);
   } catch (error) {
-    console.error("error", error);
+    console.error('error', error);
     return errorResponse(
       res,
-      "get danh sách shop không thành công",
+      'get danh sách shop không thành công',
       error,
       500
     );
@@ -71,10 +71,10 @@ const fakerDataShopInsert = async (req, res) => {
 
       console.log(`Inserted batch ${i + BATCH_SIZE}/${TOTAL}`);
     }
-    return successResponse(res, "Tạo nhiều shop thành công", {});
+    return successResponse(res, 'Tạo nhiều shop thành công', {});
   } catch (error) {
-    console.error("error", error);
-    return errorResponse(res, "Tạo nhiều shop không thành công", error, 500);
+    console.error('error', error);
+    return errorResponse(res, 'Tạo nhiều shop không thành công', error, 500);
   }
 };
 
