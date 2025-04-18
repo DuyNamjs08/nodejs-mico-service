@@ -1,0 +1,108 @@
+version: "3.8"
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    container_name: my-elasticsearch
+    environment:
+      - node.name=shopdev_es
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.10.0
+    container_name: my-kibana
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+  redis:
+    image: redis
+    container_name: my-redis
+    ports:
+      - "6379:6379"
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: my-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123123
+      POSTGRES_DB: test_db
+    ports:
+      - "5430:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: my-rabbitmq
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    ports:
+      - "5672:5672" # AMQP port
+      - "15672:15672" # Management UI port
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+  kafka:
+    image: bitnami/kafka:latest
+    container_name: kafkaMQ
+    hostname: kafka
+    extra_hosts:
+      - "kafka:127.0.0.1"
+    ports:
+      - "9092:9092"
+    environment:
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_CFG_PROCESS_ROLES: "controller,broker"
+      KAFKA_CFG_NODE_ID: "1"
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_CFG_LISTENERS: "PLAINTEXT://:9092,CONTROLLER://:9093"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092"
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
+      # KAFKAJS_NO_PARTITIONER_WARNING: "1"
+    volumes:
+      - kafka_data:/bitnami/kafka
+
+  app:
+    build: .
+    container_name: my-app
+    depends_on:
+      - redis
+      - postgres
+      - kafka
+    environment:
+      REDIS_HOST: my-redis
+      REDIS_PORT: 6379
+      DATABASE_URL: postgresql://postgres:123123@my-postgres:5432/test_db
+      KAFKA_HOST: kafka
+      KAFKA_PORT: 9092
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: admin
+      RABBITMQ_PASSWORD: admin123
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/app
+    command: ["node", "server.js"]
+
+volumes:
+  esdata:
+    driver: local
+  postgres_data:
+  kafka_data:
+  rabbitmq_data:
